@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Naitik Bansal — Software Engineer &amp; Cybersecurity Enthusiast</title>
+<meta name="description" content="Portfolio of Naitik Bansal — MCA student, cybersecurity &amp; cloud enthusiast, software engineer." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<style>
+  :root{
+    --bg: #0B1120;
+    --surface: #121A2B;
+    --surface-2: #1A2438;
+    --border: #24304A;
+    --text: #E6EDF7;
+    --text-muted: #8B98B0;
+    --accent: #4CC9F0;
+    --accent-2: #7B61FF;
+    --success: #3DDC84;
+    --shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+    --radius: 14px;
+    color-scheme: dark;
+  }
+  html[data-theme="light"]{
+    --bg: #F6F8FC;
+    --surface: #FFFFFF;
+    --surface-2: #EEF2F8;
+    --border: #DCE3EE;
+    --text: #0F1626;
+    --text-muted: #5B6578;
+    --shadow: 0 20px 50px -25px rgba(20,30,60,0.25);
+    color-scheme: light;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: background .4s ease, color .4s ease;
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4,.display{ font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+  a{ color: inherit; text-decoration: none; }
+  ::selection{ background: var(--accent); color: #051019; }
+  a:focus-visible, button:focus-visible, .icon-btn:focus-visible, .btn:focus-visible, input:focus-visible, textarea:focus-visible, .exp-tab:focus-visible{
+    outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px;
+  }
+
+  /* background grid texture */
+  .grid-bg{
+    position: fixed; inset: 0; z-index: -1;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 46px 46px;
+    opacity: 0.35;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+  html[data-theme="light"] .grid-bg{ opacity: 0.5; }
+
+  /* ---------- Loading screen ---------- */
+  #loader{
+    position: fixed; inset:0; z-index: 9999;
+    background: var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #loader.hidden{ opacity:0; visibility:hidden; }
+  .loader-term{
+    font-family:'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 15px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .loader-dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); animation: pulse 1s infinite ease-in-out; }
+  .loader-dot:nth-child(2){ animation-delay:.15s;}
+  .loader-dot:nth-child(3){ animation-delay:.3s;}
+  @keyframes pulse{ 0%,100%{opacity:.25; transform:scale(.8);} 50%{opacity:1; transform:scale(1);} }
+
+  /* ---------- Scroll progress ---------- */
+  #scroll-progress{
+    position: fixed; top:0; left:0; height:3px; width:0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    z-index: 1001;
+    transition: width .1s ease-out;
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position: fixed; top:0; left:0; right:0; z-index:1000;
+    backdrop-filter: blur(14px) saturate(140%);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-wrap{
+    max-width: 1160px; margin:0 auto; padding: 14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo{ font-family:'Space Grotesk'; font-weight:700; font-size:18px; display:flex; align-items:center; gap:8px; }
+  .logo .dot{ width:8px; height:8px; border-radius:50%; background: var(--success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 20%, transparent); }
+  nav ul{ display:flex; gap: 28px; list-style:none; margin:0; padding:0; }
+  nav a{
+    font-size: 13.5px; color: var(--text-muted); font-weight:500;
+    position:relative; padding: 4px 0; transition: color .25s ease;
+  }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+    background: var(--accent); transition: width .25s ease;
+  }
+  nav a:hover, nav a.active{ color: var(--text); }
+  nav a.active::after{ width: 100%; }
+  .nav-actions{ display:flex; align-items:center; gap:14px; }
+  .icon-btn{
+    width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border); background: var(--surface); cursor:pointer; transition: all .25s ease;
+  }
+  .icon-btn:hover{ border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .menu-toggle{ display:none; }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 12px 22px; border-radius: 10px; font-weight:600; font-size:14px;
+    cursor:pointer; border:1px solid transparent; transition: all .25s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{ background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#04101c; }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 10px 30px -8px color-mix(in srgb, var(--accent) 60%, transparent); }
+  .btn-outline{ background: transparent; border-color: var(--border); color: var(--text); }
+  .btn-outline:hover{ border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .btn-sm{ padding: 8px 14px; font-size: 12.5px; border-radius: 8px; }
+
+  /* ---------- Layout helpers ---------- */
+  section{ padding: 120px 24px 40px; max-width: 1160px; margin: 0 auto; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:12.5px; color: var(--accent);
+    display:flex; align-items:center; gap:10px; margin-bottom:14px; text-transform: uppercase; letter-spacing: .12em;
+  }
+  .eyebrow::before{ content:''; width:22px; height:1px; background: var(--accent); }
+  h2.section-title{ font-size: clamp(28px,4vw,40px); margin: 0 0 14px; }
+  .section-sub{ color: var(--text-muted); max-width: 620px; margin-bottom: 56px; font-size:15.5px; line-height:1.7; }
+
+  .reveal{ opacity:0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible{ opacity:1; transform: translateY(0); }
+
+  /* ---------- Hero ---------- */
+  #home{
+    min-height: 100svh; display:flex; align-items:center; padding-top: 140px; padding-bottom: 60px;
+  }
+  .hero-grid{ display:grid; grid-template-columns: 1.05fr 1fr; gap:56px; align-items:center; width:100%; }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono'; color: var(--success); font-size:13px; display:flex; align-items:center; gap:8px; margin-bottom:20px;
+  }
+  .live-dot{ width:7px; height:7px; border-radius:50%; background: var(--success); position:relative; }
+  .live-dot::after{
+    content:''; position:absolute; inset:-5px; border-radius:50%; border:1px solid var(--success); animation: ring 1.8s infinite ease-out;
+  }
+  @keyframes ring{ 0%{ transform:scale(.4); opacity:1;} 100%{ transform:scale(1.8); opacity:0;} }
+
+  .hero-name{ font-size: clamp(40px, 6vw, 66px); line-height:1.02; margin:0 0 18px; font-weight:700; }
+  .hero-name .accent-text{ background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero-title{ font-size: clamp(16px,2vw,19px); color: var(--text-muted); margin-bottom: 22px; font-weight:500; }
+  .hero-title .cursor{ display:inline-block; width:2px; height:1em; background:var(--accent); margin-left:2px; vertical-align:-2px; animation: blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+  .hero-desc{ color: var(--text-muted); font-size:15.5px; line-height:1.75; max-width: 520px; margin-bottom:32px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom: 36px; }
+  .hero-socials{ display:flex; gap:12px; }
+
+  /* Terminal signature element */
+  .terminal{
+    background: var(--surface); border:1px solid var(--border); border-radius: 16px;
+    box-shadow: var(--shadow); overflow:hidden;
+  }
+  .terminal-bar{
+    display:flex; align-items:center; justify-content:space-between; padding: 12px 16px;
+    border-bottom: 1px solid var(--border); background: var(--surface-2);
+  }
+  .terminal-dots{ display:flex; gap:7px; }
+  .terminal-dots span{ width:10px; height:10px; border-radius:50%; background: var(--border); }
+  .terminal-dots span:nth-child(1){ background: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+  .terminal-dots span:nth-child(2){ background: color-mix(in srgb, var(--accent-2) 55%, var(--border)); }
+  .terminal-dots span:nth-child(3){ background: color-mix(in srgb, var(--success) 55%, var(--border)); }
+  .terminal-title{ font-family:'JetBrains Mono'; font-size:12px; color: var(--text-muted); }
+  .terminal-body{ padding: 26px 24px; font-family:'JetBrains Mono'; font-size: 13.6px; line-height:1.9; min-height: 300px; }
+  .terminal-body .prompt{ color: var(--accent-2); }
+  .terminal-body .path{ color: var(--accent); }
+  .terminal-line{ color: var(--text-muted); }
+  .terminal-key{ color: var(--text); }
+  .terminal-val{ color: var(--text); }
+  #typed-output{ white-space: pre-wrap; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns: 0.9fr 1.1fr; gap: 50px; align-items:start; }
+  .about-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+  .stat-row{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:20px; }
+  .stat{ background: var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .stat .num{ font-family:'Space Grotesk'; font-size:24px; font-weight:700; color: var(--accent); }
+  .stat .label{ font-size:12px; color: var(--text-muted); margin-top:4px; }
+  .about-text p{ color: var(--text-muted); line-height:1.85; font-size:15.5px; margin-bottom:16px; }
+
+  /* ---------- Education timeline ---------- */
+  .timeline{ position:relative; padding-left: 34px; }
+  .timeline::before{ content:''; position:absolute; left:6px; top:6px; bottom:6px; width:1px; background: var(--border); }
+  .tl-item{ position:relative; padding-bottom: 46px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-node{ position:absolute; left:-34px; top:4px; width:13px; height:13px; border-radius:50%; background: var(--bg); border:2px solid var(--accent); }
+  .tl-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding: 22px 26px; transition: border-color .25s ease, transform .25s ease; }
+  .tl-card:hover{ border-color: var(--accent); transform: translateX(4px); }
+  .tl-date{ font-family:'JetBrains Mono'; font-size:12px; color: var(--accent); margin-bottom:8px; display:block; }
+  .tl-degree{ font-size:18px; font-weight:600; margin-bottom:4px; }
+  .tl-inst{ color: var(--text-muted); font-size:14px; margin-bottom:10px; }
+  .tl-cgpa{ display:inline-flex; gap:6px; font-family:'JetBrains Mono'; font-size:12px; background: var(--surface-2); border:1px solid var(--border); padding:5px 10px; border-radius:6px; color:var(--text); }
+
+  /* ---------- Skills ---------- */
+  .skills-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .skill-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: transform .25s ease, border-color .25s ease; }
+  .skill-card:hover{ transform: translateY(-4px); border-color: var(--accent); }
+  .skill-card-head{ display:flex; align-items:center; gap:10px; margin-bottom: 16px; }
+  .skill-card-head .ic{ width:34px; height:34px; border-radius:9px; background: var(--surface-2); display:flex; align-items:center; justify-content:center; color: var(--accent); }
+  .skill-card-head h4{ margin:0; font-size:15px; }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ font-family:'JetBrains Mono'; font-size:12px; padding:6px 10px; border-radius:6px; background: var(--surface-2); border:1px solid var(--border); color: var(--text-muted); }
+
+  /* ---------- Projects ---------- */
+  .projects-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
+  .proj-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); overflow:hidden; transition: transform .3s ease, box-shadow .3s ease; display:flex; flex-direction:column; }
+  .proj-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow); }
+  .proj-top{ display:flex; align-items:center; gap:7px; padding: 14px 18px; border-bottom:1px solid var(--border); background: var(--surface-2); }
+  .proj-top span{ width:8px; height:8px; border-radius:50%; background: var(--border); }
+  .proj-body{ padding: 22px; flex:1; display:flex; flex-direction:column; }
+  .proj-body h3{ font-size:19px; margin: 0 0 10px; }
+  .proj-body p{ color: var(--text-muted); font-size:14px; line-height:1.75; margin-bottom:18px; flex:1; }
+  .proj-tags{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom: 20px; }
+  .proj-actions{ display:flex; gap:10px; }
+
+  /* ---------- Experience ---------- */
+  .exp-tabs{ display:flex; gap:10px; margin-bottom: 34px; flex-wrap:wrap; }
+  .exp-tab{ font-family:'JetBrains Mono'; font-size:13px; padding:10px 16px; border-radius:8px; border:1px solid var(--border); background: var(--surface); cursor:pointer; color: var(--text-muted); transition: all .2s ease; }
+  .exp-tab.active{ color: var(--bg); background: var(--accent); border-color: var(--accent); }
+  .exp-panel{ display:none; }
+  .exp-panel.active{ display:block; }
+  .empty-state{ text-align:center; padding: 60px 24px; border:1px dashed var(--border); border-radius: var(--radius); color: var(--text-muted); }
+  .empty-state .ic{ width:44px; height:44px; margin:0 auto 16px; color: var(--accent); }
+  .intern-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding: 26px; margin-bottom:20px; }
+  .intern-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom: 14px; }
+  .intern-head h3{ margin:0 0 4px; font-size:18px; }
+  .intern-org{ color: var(--accent); font-size:13.5px; font-weight:600; }
+  .intern-date{ font-family:'JetBrains Mono'; font-size:12px; color: var(--text-muted); white-space:nowrap; padding:6px 10px; border:1px solid var(--border); border-radius:6px; }
+  .intern-desc{ color: var(--text-muted); font-size:14.5px; line-height:1.8; margin: 12px 0 16px; padding-left: 18px; }
+  .intern-desc li{ margin-bottom:6px; }
+  .intern-tech{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom: 18px; }
+  .intern-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  /* Horizontal scroll for virtual internships */
+  .scroll-hint{ display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono'; font-size:12px; color: var(--text-muted); margin-bottom:16px; }
+  .scroll-hint i{ width:14px; height:14px; }
+  .h-scroll{
+    display:flex; gap:20px; overflow-x:auto; padding: 4px 4px 20px;
+    scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+  }
+  .h-scroll::-webkit-scrollbar{ height:6px; }
+  .h-scroll::-webkit-scrollbar-track{ background: var(--surface-2); border-radius:10px; }
+  .h-scroll::-webkit-scrollbar-thumb{ background: var(--border); border-radius:10px; }
+  .h-scroll::-webkit-scrollbar-thumb:hover{ background: var(--accent); }
+  .intern-card.h-card{
+    flex: 0 0 340px; scroll-snap-align: start; margin-bottom:0;
+  }
+  @media (max-width: 600px){
+    .intern-card.h-card{ flex-basis: 82vw; }
+  }
+
+  /* ---------- Certificates ---------- */
+  .cert-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: 22px; }
+  .cert-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); overflow:hidden; transition: transform .25s ease; }
+  .cert-card:hover{ transform: translateY(-4px); }
+  .cert-thumb{
+    height: 120px; background: repeating-linear-gradient(135deg, var(--surface-2), var(--surface-2) 10px, var(--bg) 10px, var(--bg) 20px);
+    display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--border); color: var(--text-muted);
+  }
+  .cert-body{ padding:20px; }
+  .cert-body h4{ font-size:15px; margin:0 0 6px; line-height:1.4; }
+  .cert-org{ font-size:13px; color: var(--accent); margin-bottom:4px; }
+  .cert-date{ font-family:'JetBrains Mono'; font-size:11.5px; color: var(--text-muted); margin-bottom:14px; }
+  .cert-skills{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+  .contact-info-item{ display:flex; align-items:flex-start; gap:14px; padding: 16px 0; border-bottom:1px solid var(--border); }
+  .contact-info-item:last-child{ border-bottom:none; }
+  .contact-info-item .ic{ width:38px; height:38px; border-radius:9px; background: var(--surface-2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--accent); flex-shrink:0; }
+  .contact-info-item h5{ margin:0 0 4px; font-size:13.5px; color: var(--text-muted); font-weight:500; }
+  .contact-info-item p{ margin:0; font-size:15px; }
+  .form-group{ margin-bottom: 18px; }
+  .form-group label{ display:block; font-size:12.5px; color: var(--text-muted); margin-bottom:7px; font-family:'JetBrains Mono'; }
+  .form-group input, .form-group textarea{
+    width:100%; padding: 12px 14px; border-radius:9px; border:1px solid var(--border); background: var(--surface);
+    color: var(--text); font-family:'Inter'; font-size:14px; transition: border-color .2s ease;
+  }
+  .form-group input:focus, .form-group textarea:focus{ outline:none; border-color: var(--accent); }
+  .form-note{ font-size:12.5px; color: var(--text-muted); margin-top:10px; }
+
+  /* ---------- Footer ---------- */
+  footer{ border-top:1px solid var(--border); padding: 50px 24px 30px; margin-top: 60px; }
+  .footer-wrap{ max-width:1160px; margin:0 auto; display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:40px; }
+  .footer-wrap h5{ font-size:13px; text-transform:uppercase; letter-spacing:.1em; color: var(--text-muted); margin-bottom:16px; }
+  .footer-links{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+  .footer-links a{ color: var(--text-muted); font-size:14px; transition: color .2s ease; }
+  .footer-links a:hover{ color: var(--accent); }
+  .footer-bottom{ max-width:1160px; margin: 40px auto 0; padding-top: 24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+  .footer-bottom p{ color: var(--text-muted); font-size:13px; margin:0; }
+  #back-to-top{ position: fixed; bottom: 28px; right: 28px; width:46px; height:46px; border-radius:50%; background: var(--accent); color:#04101c; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; visibility:hidden; transition: all .3s ease; z-index: 900; box-shadow: 0 10px 25px -8px rgba(76,201,240,0.5); }
+  #back-to-top.show{ opacity:1; visibility:visible; }
+  #back-to-top:hover{ transform: translateY(-4px); }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 900px){
+    .hero-grid, .about-grid, .contact-grid{ grid-template-columns: 1fr; }
+    .skills-grid{ grid-template-columns: repeat(2,1fr); }
+    .projects-grid, .cert-grid{ grid-template-columns: 1fr; }
+    .footer-wrap{ grid-template-columns: 1fr; }
+    nav ul{ position: fixed; top:66px; left:0; right:0; background: var(--bg); border-bottom:1px solid var(--border); flex-direction:column; padding: 20px 24px; gap:18px; transform: translateY(-130%); transition: transform .3s ease; }
+    nav ul.open{ transform: translateY(0); }
+    .menu-toggle{ display:flex; }
+  }
+  @media (max-width: 600px){
+    .skills-grid{ grid-template-columns: 1fr; }
+    section{ padding: 100px 18px 30px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-term mono">
+    <span class="loader-dot"></span><span class="loader-dot"></span><span class="loader-dot"></span>
+    &nbsp;booting portfolio.exe
+  </div>
+</div>
+
+<div id="scroll-progress"></div>
+<div class="grid-bg"></div>
+
+<!-- Header -->
+<header>
+  <div class="nav-wrap">
+    <div class="logo"><span class="dot"></span>naitik<span class="mono" style="color:var(--text-muted)">.bansal</span></div>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#certificates">Certificates</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <div class="icon-btn" id="theme-toggle" title="Toggle theme" role="button" aria-label="Toggle dark or light theme" tabindex="0"><i data-lucide="moon"></i></div>
+      <div class="icon-btn menu-toggle" id="menu-toggle" title="Menu" role="button" aria-label="Toggle navigation menu" tabindex="0"><i data-lucide="menu"></i></div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow"><span class="live-dot"></span>OPEN TO OPPORTUNITIES</div>
+      <h1 class="hero-name">Naitik <span class="accent-text">Bansal</span></h1>
+      <div class="hero-title mono">Software Engineer · Cybersecurity &amp; Cloud<span class="cursor"></span></div>
+      <p class="hero-desc">MCA student at SRM Institute of Science and Technology with a background in Cyber Security &amp; Computer Networks. Hands-on experience across AWS cloud architecture, Zero Trust networking, and secure infrastructure design through applied internships.</p>
+      <div class="hero-actions">
+        <a href="Naitik_Bansal_Resume.pdf" download class="btn btn-primary"><i data-lucide="download" style="width:16px;height:16px"></i>Download Resume</a>
+        <a href="#contact" class="btn btn-outline"><i data-lucide="mail" style="width:16px;height:16px"></i>Contact Me</a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://github.com/naitik0" target="_blank" rel="noopener" class="icon-btn" title="GitHub" aria-label="GitHub profile"><i data-lucide="github" style="width:17px;height:17px"></i></a>
+        <a href="https://linkedin.com/in/naitik08" target="_blank" rel="noopener" class="icon-btn" title="LinkedIn" aria-label="LinkedIn profile"><i data-lucide="linkedin" style="width:17px;height:17px"></i></a>
+        <a href="mailto:naitikbansal2004@gmail.com" class="icon-btn" title="Email" aria-label="Send an email"><i data-lucide="mail" style="width:17px;height:17px"></i></a>
+      </div>
+    </div>
+    <div class="terminal reveal">
+      <div class="terminal-bar">
+        <div class="terminal-dots"><span></span><span></span><span></span></div>
+        <div class="terminal-title">naitik@portfolio — zsh</div>
+        <div style="width:40px"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line"><span class="prompt">naitik@portfolio</span>:<span class="path">~</span>$ whoami</div>
+        <div id="typed-output"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="eyebrow">01 · About</div>
+  <h2 class="section-title reveal">A builder who thinks in systems &amp; security</h2>
+  <p class="section-sub reveal">The short version — what I study, what I've practiced, and where I add value.</p>
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <div class="eyebrow" style="margin-bottom:16px">Snapshot</div>
+      <div class="stat-row">
+        <div class="stat"><div class="num">8.72</div><div class="label">CGPA · MCA (Sem 2)</div></div>
+        <div class="stat"><div class="num">9.20</div><div class="label">CGPA · BCA (Distinction)</div></div>
+        <div class="stat"><div class="num">7</div><div class="label">AICTE Virtual Internships</div></div>
+        <div class="stat"><div class="num">4</div><div class="label">Certifications</div></div>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <p>I'm a Master of Computer Applications student at SRM Institute of Science and Technology, building on a Bachelor's in Computer Applications from Galgotias University where I specialized in Cyber Security &amp; Computer Networks and graduated with First Class Distinction.</p>
+      <p>My practical experience spans AWS cloud architecture, Zero Trust network security with Zscaler, ethical hacking, enterprise routing &amp; switching with Juniper, embedded systems with Microchip, network security with Palo Alto Networks, and data science with Altair — all through structured, industry-backed virtual internships under the AICTE program.</p>
+      <p>Alongside coursework in data structures, operating systems, DBMS, and computer networks, I build real projects — from responsive web interfaces to mobile apps solving civic problems — using Python, JavaScript, and SQL as my everyday tools.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="eyebrow">02 · Education</div>
+  <h2 class="section-title reveal">Academic timeline</h2>
+  <p class="section-sub reveal">In chronological order, each stage building toward the next.</p>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-node"></div>
+      <div class="tl-card">
+        <span class="tl-date mono">JUL 2025 — MAY 2027</span>
+        <div class="tl-degree">Master of Computer Applications (MCA)</div>
+        <div class="tl-inst">SRM Institute of Science and Technology · Delhi NCR, India</div>
+        <span class="tl-cgpa">CGPA: 8.72 (Semester 2)</span>
+      </div>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-node"></div>
+      <div class="tl-card">
+        <span class="tl-date mono">AUG 2022 — JUN 2025</span>
+        <div class="tl-degree">BCA — Cyber Security &amp; Computer Networks</div>
+        <div class="tl-inst">Galgotias University · Gautam Buddh Nagar, India</div>
+        <span class="tl-cgpa">CGPA: 9.20 — First Class with Distinction</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="eyebrow">03 · Skills</div>
+  <h2 class="section-title reveal">Tools of the trade</h2>
+  <p class="section-sub reveal">Grouped by domain — from core languages to network security concepts.</p>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-card-head"><div class="ic"><i data-lucide="code-2" style="width:17px;height:17px"></i></div><h4>Languages</h4></div>
+      <div class="chip-row">
+        <span class="chip">Python</span><span class="chip">C</span><span class="chip">SQL</span><span class="chip">JavaScript</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-head"><div class="ic"><i data-lucide="layout" style="width:17px;height:17px"></i></div><h4>Web Development</h4></div>
+      <div class="chip-row"><span class="chip">HTML</span><span class="chip">CSS</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-head"><div class="ic"><i data-lucide="shield-check" style="width:17px;height:17px"></i></div><h4>Cybersecurity</h4></div>
+      <div class="chip-row">
+        <span class="chip">Zero Trust Architecture</span><span class="chip">Secure Web Gateways</span><span class="chip">Traffic Inspection</span><span class="chip">Network Security Fundamentals</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-head"><div class="ic"><i data-lucide="database" style="width:17px;height:17px"></i></div><h4>Databases</h4></div>
+      <div class="chip-row"><span class="chip">PostgreSQL</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-head"><div class="ic"><i data-lucide="wrench" style="width:17px;height:17px"></i></div><h4>Tools &amp; Platforms</h4></div>
+      <div class="chip-row"><span class="chip">Git</span><span class="chip">Docker</span><span class="chip">Linux</span></div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-card-head"><div class="ic"><i data-lucide="cpu" style="width:17px;height:17px"></i></div><h4>Core CS &amp; Networking</h4></div>
+      <div class="chip-row">
+        <span class="chip">Data Structures &amp; Algorithms</span><span class="chip">Operating Systems</span><span class="chip">DBMS</span><span class="chip">Computer Networks</span><span class="chip">OOP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="eyebrow">04 · Projects</div>
+  <h2 class="section-title reveal">Selected work</h2>
+  <p class="section-sub reveal">Things I've designed and built end to end.</p>
+  <div class="projects-grid">
+    <div class="proj-card reveal">
+      <div class="proj-top"><span></span><span></span><span></span></div>
+      <div class="proj-body">
+        <h3>Personal Portfolio Website</h3>
+        <p>A responsive personal portfolio built to showcase projects, technical skills, and certifications to recruiters and collaborators — clean, mobile-friendly UI with semantic HTML and custom CSS, tuned for fast load times and accessibility.</p>
+        <div class="proj-tags"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span></div>
+        <div class="proj-actions">
+          <a href="https://github.com/naitik0" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="github" style="width:14px;height:14px"></i>GitHub</a>
+          <a href="#home" class="btn btn-outline btn-sm"><i data-lucide="external-link" style="width:14px;height:14px"></i>Live Demo</a>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <div class="proj-top"><span></span><span></span><span></span></div>
+      <div class="proj-body">
+        <h3>Clean-It</h3>
+        <p>A mobile app that lets users report garbage dumps in their vicinity through geo-tagged submissions, with an automated notification system alerting nearby municipal authorities — built to promote sustainable waste management.</p>
+        <div class="proj-tags"><span class="chip">JavaScript</span><span class="chip">Mobile App Development</span><span class="chip">Geolocation</span></div>
+        <div class="proj-actions">
+          <a href="https://github.com/naitik0" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="github" style="width:14px;height:14px"></i>GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="eyebrow">05 · Experience</div>
+  <h2 class="section-title reveal">Where I've applied it</h2>
+  <p class="section-sub reveal">On-site roles and structured virtual internships, kept separate for clarity.</p>
+
+  <div class="exp-tabs" role="tablist">
+    <div class="exp-tab active" data-tab="real" role="tab" tabindex="0" aria-selected="true">Real Experience (Offline)</div>
+    <div class="exp-tab" data-tab="virtual" role="tab" tabindex="0" aria-selected="false">AICTE / Virtual Internships</div>
+  </div>
+
+  <div class="exp-panel active" id="panel-real">
+    <div class="empty-state reveal">
+      <div class="ic"><i data-lucide="briefcase"></i></div>
+      <h4 style="margin:0 0 8px">No on-site experience added yet</h4>
+      <p style="margin:0; font-size:14px;">This resume currently lists virtual/AICTE internships only. Add your on-site work experience here when available — organization, role, duration, and impact.</p>
+    </div>
+  </div>
+
+  <div class="exp-panel" id="panel-virtual">
+    <div class="scroll-hint"><i data-lucide="move-horizontal"></i>Scroll sideways for all 7 internships</div>
+    <div class="h-scroll">
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Networking — Virtual Internship</h3>
+            <div class="intern-org">Juniper Networks (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">MAY — JUL 2023</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Learned core networking concepts including routing, switching, and network security fundamentals through Juniper's structured curriculum.</li>
+          <li>Built foundational knowledge of enterprise network design and configuration practices.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">Routing &amp; Switching</span><span class="chip">Network Security Fundamentals</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=c04388875396f82c74f41828180ffd53" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Networking — Virtual Internship</h3>
+            <div class="intern-org">ZScaler (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">JUL — SEP 2024</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Studied cloud-based network security concepts including Zero Trust Architecture, secure web gateways, and traffic inspection techniques.</li>
+          <li>Explored real-world implementations of cloud security frameworks used to protect enterprise networks from modern threats.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">Zero Trust Architecture</span><span class="chip">Secure Web Gateways</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=0795cfeff79bf679160fca4be487239d" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Cloud Foundations and Architecture — Virtual Internship</h3>
+            <div class="intern-org">Amazon Web Services (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">APR — JUN 2025</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Completed a structured virtual internship covering cloud computing fundamentals, AWS core services, and cloud architecture best practices under the AICTE–AWS Academy program.</li>
+          <li>Gained hands-on exposure to designing scalable, secure, and cost-optimized cloud architectures using AWS services.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">AWS Core Services</span><span class="chip">Cloud Architecture</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=302808a29e9d1f6e42a3d26b8b8dc2e0" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Ethical Hacking — Virtual Internship</h3>
+            <div class="intern-org">EduSkills (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">ADD DATES</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Structured virtual internship on ethical hacking fundamentals under the AICTE–EduSkills program.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">Ethical Hacking</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=c2a6f99609b9e810adb058f30fb1b362" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Networking — Virtual Internship</h3>
+            <div class="intern-org">Palo Alto Networks (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">ADD DATES</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Structured virtual internship on network security concepts under the AICTE–Palo Alto Networks program.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">Network Security</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=89203be1aa9443a2f116c16e1881a206" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Embedded Systems — Virtual Internship</h3>
+            <div class="intern-org">Microchip (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">ADD DATES</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Structured virtual internship on embedded systems concepts under the AICTE–Microchip program.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">Embedded Systems</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=470332fb45a511e565abf0d8a9900711" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+      <div class="intern-card h-card reveal">
+        <div class="intern-head">
+          <div>
+            <h3>Data Science — Virtual Internship</h3>
+            <div class="intern-org">Altair (AICTE) · Remote</div>
+          </div>
+          <span class="intern-date mono">ADD DATES</span>
+        </div>
+        <ul class="intern-desc">
+          <li>Structured virtual internship on data science concepts and tools under the AICTE–Altair program.</li>
+        </ul>
+        <div class="intern-tech">
+          <span class="chip">Data Science</span>
+        </div>
+        <div class="intern-actions">
+          <a href="https://aictecert.eduskillsfoundation.org/pages/home/verify.php?cert=7a4506b9da806fefd97bef38fd06fef4" target="_blank" rel="noopener" class="btn btn-outline btn-sm"><i data-lucide="badge-check" style="width:14px;height:14px"></i>Verify Certificate</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certificates">
+  <div class="eyebrow">06 · Certificates</div>
+  <h2 class="section-title reveal">Certifications</h2>
+  <p class="section-sub reveal">Academy and coursework credentials — each links to its live, verifiable record.</p>
+  <div class="cert-grid">
+    <div class="cert-card reveal">
+      <div class="cert-thumb"><i data-lucide="badge-check" style="width:22px;height:22px"></i></div>
+      <div class="cert-body">
+        <h4>AWS Academy Graduate — Cloud Foundations</h4>
+        <div class="cert-org">Amazon Web Services Training and Certification</div>
+        <div class="cert-date mono">Credly Badge</div>
+        <div class="cert-skills"><span class="chip">Cloud Computing</span><span class="chip">AWS Basics</span></div>
+        <a href="https://www.credly.com/badges/9a5bd489-68d9-4f84-9c4b-4915f1138b37" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;"><i data-lucide="external-link" style="width:14px;height:14px"></i>View Credential</a>
+      </div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-thumb"><i data-lucide="badge-check" style="width:22px;height:22px"></i></div>
+      <div class="cert-body">
+        <h4>AWS Academy Graduate — Cloud Architecting</h4>
+        <div class="cert-org">Amazon Web Services Training and Certification</div>
+        <div class="cert-date mono">Credly Badge</div>
+        <div class="cert-skills"><span class="chip">Cloud Architecture</span><span class="chip">Scalability</span></div>
+        <a href="https://www.credly.com/badges/d22c937f-ed4f-46ee-88a7-4f40fc34a233" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;"><i data-lucide="external-link" style="width:14px;height:14px"></i>View Credential</a>
+      </div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-thumb"><i data-lucide="badge-check" style="width:22px;height:22px"></i></div>
+      <div class="cert-body">
+        <h4>Training and Development</h4>
+        <div class="cert-org">IIT Kharagpur (NPTEL)</div>
+        <div class="cert-date mono">2023 · ID: NPTEL23HS18S6361084504192795</div>
+        <div class="cert-skills"><span class="chip">Training Design</span><span class="chip">HR Development</span></div>
+        <a href="https://nptel.ac.in/noc/E_Certificate/NPTEL23HS18S6361084504192795" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;"><i data-lucide="external-link" style="width:14px;height:14px"></i>View Credential</a>
+      </div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-thumb"><i data-lucide="badge-check" style="width:22px;height:22px"></i></div>
+      <div class="cert-body">
+        <h4>E-Business</h4>
+        <div class="cert-org">IIT Kharagpur (NPTEL)</div>
+        <div class="cert-date mono">2023 · ID: NPTEL23MG88S54380016020268737</div>
+        <div class="cert-skills"><span class="chip">E-Commerce</span><span class="chip">Digital Business</span></div>
+        <a href="https://nptel.ac.in/noc/E_Certificate/NPTEL23MG88S54380016020268737" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="width:100%; justify-content:center;"><i data-lucide="external-link" style="width:14px;height:14px"></i>View Credential</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="eyebrow">07 · Contact</div>
+  <h2 class="section-title reveal">Let's talk</h2>
+  <p class="section-sub reveal">Reach out directly, or send a message below.</p>
+  <div class="contact-grid">
+    <div class="reveal">
+      <div class="contact-info-item">
+        <div class="ic"><i data-lucide="mail" style="width:17px;height:17px"></i></div>
+        <div><h5>Email</h5><p><a href="mailto:naitikbansal2004@gmail.com">naitikbansal2004@gmail.com</a></p></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ic"><i data-lucide="phone" style="width:17px;height:17px"></i></div>
+        <div><h5>Phone</h5><p><a href="tel:+919873303206">+91 98733 03206</a></p></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ic"><i data-lucide="github" style="width:17px;height:17px"></i></div>
+        <div><h5>GitHub</h5><p><a href="https://github.com/naitik0" target="_blank" rel="noopener">github.com/naitik0</a></p></div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ic"><i data-lucide="linkedin" style="width:17px;height:17px"></i></div>
+        <div><h5>LinkedIn</h5><p><a href="https://linkedin.com/in/naitik08" target="_blank" rel="noopener">linkedin.com/in/naitik08</a></p></div>
+      </div>
+    </div>
+    <form class="reveal" id="contact-form">
+      <div class="form-group"><label>Name</label><input type="text" placeholder="Your name" required></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com" required></div>
+      <div class="form-group"><label>Message</label><textarea rows="5" placeholder="Tell me about the opportunity or project..." required></textarea></div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;"><i data-lucide="send" style="width:16px;height:16px"></i>Send Message</button>
+      <p class="form-note">This form is a front-end placeholder — connect it to a service like Formspree, EmailJS, or your own backend to receive submissions.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-wrap">
+    <div>
+      <div class="logo" style="margin-bottom:14px;"><span class="dot"></span>naitik<span class="mono" style="color:var(--text-muted)">.bansal</span></div>
+      <p style="color:var(--text-muted); font-size:14px; line-height:1.7; max-width:320px;">Software engineer in training, with a security-first lens on how systems are built and protected.</p>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#certificates">Certificates</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Connect</h5>
+      <div class="hero-socials">
+        <a href="https://github.com/naitik0" target="_blank" rel="noopener" class="icon-btn" title="GitHub" aria-label="GitHub profile"><i data-lucide="github" style="width:16px;height:16px"></i></a>
+        <a href="https://linkedin.com/in/naitik08" target="_blank" rel="noopener" class="icon-btn" title="LinkedIn" aria-label="LinkedIn profile"><i data-lucide="linkedin" style="width:16px;height:16px"></i></a>
+        <a href="mailto:naitikbansal2004@gmail.com" class="icon-btn" title="Email" aria-label="Send an email"><i data-lucide="mail" style="width:16px;height:16px"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> Naitik Bansal. All rights reserved.</p>
+    <p class="mono" style="font-size:12px;">Built with HTML · CSS · JS</p>
+  </div>
+</footer>
+
+<div id="back-to-top" role="button" tabindex="0" aria-label="Back to top"><i data-lucide="arrow-up"></i></div>
+
+<script>
+  lucide.createIcons();
+
+  // Keyboard support for div-based role="button" controls
+  document.querySelectorAll('[role="button"]').forEach(el => {
+    el.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.click(); }
+    });
+  });
+
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500);
+  });
+
+  // Theme toggle
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('theme-toggle');
+  function setTheme(t){
+    root.setAttribute('data-theme', t);
+    themeBtn.innerHTML = t === 'light' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
+    lucide.createIcons();
+  }
+  setTheme('dark');
+  themeBtn.addEventListener('click', () => {
+    setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+  });
+
+  // Mobile menu
+  const menuBtn = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Scroll progress + nav highlighting + back to top
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('#nav-links a');
+  const backToTop = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('scroll-progress').style.width = (scrollTop / docHeight * 100) + '%';
+
+    backToTop.classList.toggle('show', scrollTop > 500);
+
+    let current = '';
+    sections.forEach(sec => {
+      if(scrollTop >= sec.offsetTop - 160) current = sec.getAttribute('id');
+    });
+    navAnchors.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+  backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Typing animation in hero terminal
+  const typedEl = document.getElementById('typed-output');
+  const typedLines = [
+    { key: "name", val: "Naitik Bansal" },
+    { key: "role", val: "Software Engineer / Cybersecurity Enthusiast" },
+    { key: "focus", val: "Cloud Architecture, Network Security, Full-stack Basics" },
+    { key: "status", val: "Open to opportunities" }
+  ];
+  function typeSequence(){
+    let out = "";
+    let li = 0;
+    function typeLine(){
+      if(li >= typedLines.length){
+        typedEl.innerHTML = out + '<span class="cursor" style="display:inline-block;width:7px;height:14px;background:var(--accent);vertical-align:-2px;"></span>';
+        return;
+      }
+      const line = typedLines[li];
+      const prefix = `<span class="terminal-key">${line.key}</span>: `;
+      let i = 0;
+      out += "\\n" + prefix;
+      typedEl.innerHTML = out;
+      function typeChar(){
+        if(i <= line.val.length){
+          typedEl.innerHTML = out + '<span class="terminal-val">' + line.val.slice(0, i) + '</span>';
+          i++;
+          setTimeout(typeChar, 22);
+        } else {
+          out += '<span class="terminal-val">' + line.val + '</span>';
+          li++;
+          setTimeout(typeLine, 260);
+        }
+      }
+      typeChar();
+    }
+    typeLine();
+  }
+  setTimeout(typeSequence, 700);
+
+  // Experience tabs
+  document.querySelectorAll('.exp-tab').forEach(tab => {
+    const activate = () => {
+      document.querySelectorAll('.exp-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      document.querySelectorAll('.exp-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    };
+    tab.addEventListener('click', activate);
+    tab.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); activate(); }
+    });
+  });
+
+  // Contact form (placeholder submit)
+  document.getElementById('contact-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('This is a placeholder form. Connect it to Formspree, EmailJS, or your own backend to receive messages.');
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
